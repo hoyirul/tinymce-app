@@ -55,4 +55,58 @@ class IssueController extends Controller
 
         return response()->json($issue);
     }
+
+    public function uploadMedia(Request $request, Issue $issue)
+    {
+        // Validasi request untuk setiap file
+        $request->validate([
+            'files.*' => 'required|file|mimes:jpeg,png,pdf,xlsx,csv,txt|max:2048',
+        ]);
+
+        // Loop melalui setiap file yang diunggah
+        foreach ($request->file('files') as $file) {
+            $issue->addMedia($file)->toMediaCollection('images');
+        }
+
+        // Kembalikan respons JSON
+        return response()->json(['message' => 'Files uploaded successfully'], 200);
+    }
+
+    // Delete by model
+    public function deleteMedia(Issue $issue)
+    {
+        $issue->clearMediaCollection('images');
+
+        return response()->json(['message' => 'Files deleted successfully'], 200);
+    }
+
+    // Delete by media id
+    public function deleteMediaById(Request $request, Issue $issue)
+    {
+        $mediaId = $request->input('media_id');
+
+        $media = $issue->media()->find($mediaId);
+
+        if ($media) {
+            $media->delete();
+            return response()->json(['message' => 'File deleted successfully'], 200);
+        }
+
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    public function getMediaByIssueId($issueId)
+    {
+        try {
+            // Cari Issue berdasarkan ID
+            $issue = Issue::findOrFail($issueId);
+
+            // Ambil semua media dari koleksi 'images' milik Issue
+            $media = $issue->getMedia('images');
+
+            return response()->json($media, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Issue not found'], 404);
+        }
+    }
 }

@@ -22,3 +22,10 @@ Route::post('/upload-image', [IssueController::class, 'uploadImage']);
 Route::post('/save-content', [IssueController::class, 'saveContent']);
 Route::post('/delete-image', [IssueController::class, 'deleteImage']);
 Route::get('/issue/{id}', [IssueController::class, 'show']);
+
+// Upload media
+Route::post('/issue/{issue}/media', [IssueController::class, 'uploadMedia']);
+// Delete media
+Route::delete('/issue/{issue}/media', [IssueController::class, 'deleteMedia']);
+// Get media
+Route::get('/issue/{issue}/media', [IssueController::class, 'getMediaByIssueId']);
