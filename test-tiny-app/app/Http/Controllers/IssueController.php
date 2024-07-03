@@ -65,7 +65,7 @@ class IssueController extends Controller
 
         // Loop melalui setiap file yang diunggah
         foreach ($request->file('files') as $file) {
-            $issue->addMedia($file)->toMediaCollection('images');
+            $issue->addMedia($file)->toMediaCollection('attachments');
         }
 
         // Kembalikan respons JSON
@@ -75,7 +75,7 @@ class IssueController extends Controller
     // Delete by model
     public function deleteMedia(Issue $issue)
     {
-        $issue->clearMediaCollection('images');
+        $issue->clearMediaCollection('attachments');
 
         return response()->json(['message' => 'Files deleted successfully'], 200);
     }
@@ -101,8 +101,8 @@ class IssueController extends Controller
             // Cari Issue berdasarkan ID
             $issue = Issue::findOrFail($issueId);
 
-            // Ambil semua media dari koleksi 'images' milik Issue
-            $media = $issue->getMedia('images');
+            // Ambil semua media dari koleksi 'attachments' milik Issue
+            $media = $issue->getMedia('attachments');
 
             return response()->json($media, 200);
         } catch (\Exception $e) {

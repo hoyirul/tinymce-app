@@ -119,7 +119,7 @@ export default function UploadFile() {
       }
 
       // Mengirim permintaan POST menggunakan Axios
-      const response = await axios.post('http://localhost:8000/issue/1/media', formData, {
+      const response = await axios.post('http://localhost:8001/issue/1/media', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           // 'X-CSRF-TOKEN': csrfToken,
